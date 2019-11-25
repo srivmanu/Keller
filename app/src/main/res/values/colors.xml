@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorFGTint">#FFFFFF</color>
+    <color name="colorFGText">#ffffff</color>
+    <color name="orange_dark">#E64A19</color>
+    <color name="yellow">#ffff00</color>
+    <color name="colorPrimaryLight">#B0FFF4</color>
+    <color name = "light_green">#AED581</color>
+    <color name = "light_blue">#64B5F6</color>
+    <color name = "light_yellow">#FFD54F</color>
+    <color name = "light_orange">#FF8A65</color>
+    <color name = "light_purple">#9575CD</color>
+    <color name = "light_gray">#959595</color>
+    <color name="calendar_text_current_day">#A5D6A7</color>
+</resources>

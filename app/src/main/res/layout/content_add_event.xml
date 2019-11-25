@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+    <EditText
+        android:id="@+id/add_event_event_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/event_title"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/add_event_weather_miniview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <include
+        android:id="@+id/add_event_weather_miniview"
+        layout="@layout/comp_weather_mini"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <EditText
+        android:id="@+id/add_event_end_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/end_time"
+        android:inputType="time"
+        app:layout_constraintBottom_toTopOf="@+id/add_event_weather_miniview"
+        app:layout_constraintEnd_toEndOf="@+id/add_event_start_time"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/add_event_start_time"
+        app:layout_constraintTop_toBottomOf="@+id/add_event_start_time"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/add_event_start_time"
+        android:layout_width="163dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/start_time"
+        android:inputType="time"
+
+        app:layout_constraintBottom_toTopOf="@+id/add_event_weather_miniview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/add_event_event_title"
+        app:layout_constraintTop_toBottomOf="@+id/add_event_event_title"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/add_event_start_date"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:hint="@string/start_date"
+        android:inputType="date"
+        app:layout_constraintBottom_toBottomOf="@+id/add_event_start_time"
+        app:layout_constraintEnd_toEndOf="@+id/add_event_event_title"
+        app:layout_constraintStart_toEndOf="@+id/add_event_start_time"
+        app:layout_constraintTop_toTopOf="@+id/add_event_start_time"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/add_event_end_date"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:hint="@string/end_date"
+        android:inputType="date"
+        app:layout_constraintBottom_toBottomOf="@+id/add_event_end_time"
+        app:layout_constraintEnd_toEndOf="@+id/add_event_start_date"
+        app:layout_constraintStart_toEndOf="@+id/add_event_start_time"
+        app:layout_constraintTop_toTopOf="@+id/add_event_end_time"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/add_event_location"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/location"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/add_event_weather_miniview"
+        app:layout_constraintEnd_toEndOf="@+id/add_event_end_date"
+        app:layout_constraintStart_toStartOf="@+id/add_event_end_time"
+        app:layout_constraintTop_toBottomOf="@+id/add_event_end_time"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/add_event_notifications_handler"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:layout_marginBottom="16dp"
+        tools:listitem="@layout/notification_list_item"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/add_event_weather_miniview"
+        app:layout_constraintEnd_toEndOf="@+id/add_event_location"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/add_event_location"
+        app:layout_constraintTop_toBottomOf="@+id/add_event_fab"
+        tools:itemCount="2"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_event_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:tint="@color/colorFGTint"
+        app:backgroundTint="#B9B9B9"
+        app:fabCustomSize="32sp"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toTopOf="@+id/add_event_weather_miniview"
+        app:layout_constraintEnd_toEndOf="@+id/add_event_location"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/add_event_location"
+        app:layout_constraintTop_toBottomOf="@+id/add_event_location"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/ic_add"
+        android:focusable="true" />
+
+    <TextView
+        android:id="@+id/add_event_notif_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/notifications"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toBottomOf="@+id/add_event_fab"
+        app:layout_constraintEnd_toStartOf="@+id/add_event_fab"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/add_event_location"
+        app:layout_constraintTop_toTopOf="@+id/add_event_fab" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:tint="@color/yellow"
+        app:layout_constraintBottom_toTopOf="@+id/add_event_weather_miniview"
+        app:layout_constraintEnd_toEndOf="@+id/add_event_weather_miniview"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@android:drawable/ic_menu_save" />
+</androidx.constraintlayout.widget.ConstraintLayout>

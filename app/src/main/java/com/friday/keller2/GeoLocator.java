@@ -45,6 +45,14 @@ public class GeoLocator {
         this.geoAddress();
     }
 
+    public GeoLocator(Context context, double lat, double lon) {
+        this.context = context;
+//        this.GetLocation();
+        lattitude = lat;
+        longitude = lon;
+        this.geoAddress();
+    }
+
     public void GetLocation() {
         Context var10001 = this.context;
         LocationManager locationManager = (LocationManager) this.context.getSystemService(Context.LOCATION_SERVICE);

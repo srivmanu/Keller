@@ -15,24 +15,27 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.26999998">
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="0sp"
-            android:layout_height="0sp"
-            android:layout_marginBottom="48dp"
-            android:layout_marginEnd="48dp"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="48dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
             android:contentDescription="@string/splash"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.17000002"
-            tools:srcCompat="@drawable/ic_launcher_foreground" />
+            app:srcCompat="@drawable/ic_launcher_foreground"
+            tools:src="@drawable/ic_launcher_foreground" />
 
         <ProgressBar
             android:layout_width="80sp"

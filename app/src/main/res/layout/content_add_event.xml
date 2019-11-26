@@ -27,6 +27,7 @@
         layout="@layout/comp_weather_mini"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -138,8 +139,8 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:tint="@color/yellow"
-        app:layout_constraintBottom_toTopOf="@+id/add_event_weather_miniview"
-        app:layout_constraintEnd_toEndOf="@+id/add_event_weather_miniview"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -148,6 +149,7 @@
 
     <ScrollView
 
+        android:id="@+id/scrollView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="24dp"
@@ -159,6 +161,7 @@
         app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
+            android:id="@+id/recurrance_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -166,7 +169,7 @@
             android:paddingStart="8sp">
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/recurrance_count"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="4sp"
@@ -175,7 +178,7 @@
                 android:inputType="number" />
 
             <Spinner
-                android:id="@+id/spinner"
+                android:id="@+id/rec_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="4sp"

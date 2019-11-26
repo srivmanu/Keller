@@ -26,7 +26,11 @@ public class WeatherFragment extends Fragment {
 
     TextView nowWeatherUnit;
 
+    private TextView currTime;
+
     private RecyclerView list;
+
+    private TextView nextTime;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
@@ -41,6 +45,8 @@ public class WeatherFragment extends Fragment {
         nowWeatherUnit = root.findViewById(R.id.now_weather_unit);
         nextWeather = root.findViewById(R.id.next_weather_text);
         nextWeatherUnit = root.findViewById(R.id.next_weather_unit);
+        nextTime = root.findViewById(R.id.next_event_time);
+        currTime = root.findViewById(R.id.time_updated_at);
         fillDataForWeather();
         return root;
     }
@@ -51,17 +57,22 @@ public class WeatherFragment extends Fragment {
         if (now != null) {
             nowWeather.setText(String.valueOf(now.getTemp()));
             nowWeatherUnit.setText((now.getUnitString()));
+            currTime.setText(App.getInstance().getCurrentTime("K:mm a"));
         } else {
             nowWeather.setText("ERR");
             nowWeatherUnit.setText("");
+            currTime.setText("");
         }
 
         if (next != null) {
             nextWeather.setText(String.valueOf(next.getTemp()));
-            nextWeatherUnit.setText((next.getUnitString()));
+            nextWeatherUnit.setText(App.getInstance().convertTimeStampToDateString(
+                    App.getInstance().getLocalSummaryModel().getEvent_next().getStart().getTime().getTime()));
+            nextTime.setText(next.getDate());
         } else {
             nextWeather.setText("ERR");
             nextWeatherUnit.setText("");
+            nextTime.setText("");
         }
     }
 }

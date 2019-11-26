@@ -23,8 +23,10 @@ import java.util.concurrent.ExecutionException;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -52,6 +54,8 @@ public class App extends Application {
     private String choiceKey = "USER_TEMP_CHOICE_KEY";
 
     private List<WeatherModel> hourlyWeather;
+
+    private String idKey = "ID_KEY";
 
     private ArrayList<EventModel> localEventList;
 
@@ -95,6 +99,13 @@ public class App extends Application {
         Call c = client.newCall(request);
         c.enqueue(callback);
         return c;
+    }
+
+    public String getCurrentTime(String format) {
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
+        String time = sdf.format(d);
+        return time;
     }
 
     public WeatherModel getCurrentWeather() {
@@ -170,6 +181,13 @@ public class App extends Application {
             getSummaryFromServer();
         }
         return model;
+    }
+
+    public String getNewId() {
+        getPrefs().edit().putInt(idKey,
+                getPrefs().getInt(idKey, 0) + 1).apply();
+        return String.valueOf(getPrefs().getInt(idKey, 0));
+
     }
 
     public String getServerURL() {
@@ -316,8 +334,32 @@ public class App extends Application {
         getPrefs().edit().putString(SERVER_URL, urlText).apply();
     }
 
+    public void post(String url, String json) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = RequestBody.create(json, MediaType.get("application/json; charset=utf-8"));
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        client.newCall(request);
+//        try (Response response = client.newCall(request).execute()) {
+//            return response.body().string();
+//        }
+    }
+
     public void setLocalEventList(final ArrayList<EventModel> localEventList) {
         this.localEventList = localEventList;
+    }
+
+    public void sendNewEventToServer(JSONObject model) {
+        final String url = getServerURL() + "/event";
+        try {
+            post(url, model.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void getEventListFromServer() {

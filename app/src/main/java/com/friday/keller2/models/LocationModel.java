@@ -1,6 +1,7 @@
 package com.friday.keller2.models;
 
 import android.util.Log;
+import org.json.JSONObject;
 
 /**
  * Created By srivmanu on 11/4/2019 for Keller 2
@@ -30,9 +31,12 @@ public class LocationModel {
         this.name = "Demo Loc";
     }
 
-    public LocationModel(final String locationString) {
-        this.name = locationString;
-        //todo location --> lat long
+
+    public LocationModel(final JSONObject location) {
+        //TODO
+        this.lat = "0.0";
+        this.lon = "0.0";
+        this.name = "Demo Loc";
     }
 
     public String getLat() {
@@ -53,5 +57,17 @@ public class LocationModel {
 
     public String logString() {
         return "\nName : " + name + "\nLat : " + lat + "\nLong : " + lon;
+    }
+
+    public void setLat(final String lat) {
+        this.lat = lat;
+    }
+
+    public void setLon(final String lon) {
+        this.lon = lon;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
     }
 }

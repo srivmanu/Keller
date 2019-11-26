@@ -3,6 +3,8 @@ package com.friday.keller2.adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.location.Address;
+import android.location.Geocoder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +18,11 @@ import com.friday.keller2.App;
 import com.friday.keller2.R;
 import com.friday.keller2.adapters.CalendarListItemAdapter.CalendarListViewHolder;
 import com.friday.keller2.models.EventModel;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Created By srivmanu on 11/5/2019 for Keller 2
@@ -67,7 +72,24 @@ public class CalendarListItemAdapter extends Adapter<CalendarListViewHolder> {
             final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             this.model = event;
             eventTitle.setText(event.getTitle());
-            eventLocation.setText(event.getLocation().getName());
+            if (event.getLocation() != null) {
+                Geocoder geocoder = new Geocoder(context.context, Locale.getDefault());
+                List<Address> addresses = null;
+                String cityName = "";
+                try {
+                    addresses = geocoder.getFromLocation(
+                            Double.parseDouble(event.getLocation().getLat()),
+                            Double.parseDouble(event.getLocation().getLon()),
+                            1);
+                    if (addresses != null && addresses.size() > 0) {
+                        cityName = addresses.get(0).getAddressLine(0);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                event.getLocation().setName(cityName);
+                eventLocation.setText(event.getLocation().getName());
+            }
             startTime.setText((sdf.format(event.getStart().getTime())));
             endTime.setText((sdf.format(event.getEnd().getTime())));
             if (event.getModel() != null) {

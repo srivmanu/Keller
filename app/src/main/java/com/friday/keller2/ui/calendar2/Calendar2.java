@@ -11,13 +11,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.applikeysolutions.cosmocalendar.view.CalendarView;
+import com.friday.keller2.App;
 import com.friday.keller2.R;
 import com.friday.keller2.adapters.CalendarListItemAdapter;
-import com.friday.keller2.enums.TempUnitEnum;
 import com.friday.keller2.enums.WeatherEnum;
 import com.friday.keller2.models.EventModel;
 import com.friday.keller2.models.LocationModel;
-import com.friday.keller2.models.WeatherModel;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -37,7 +36,8 @@ public class Calendar2 extends Fragment {
         cal = root.findViewById(R.id.calendar_view2);
         final RecyclerView list = root.findViewById(R.id.calendar2_recycler);
         list.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        final ArrayList<EventModel> eventList = getEventList(5);
+        final ArrayList<EventModel> eventList = App.getInstance().getEventListlocal();
+
         list.setAdapter(new CalendarListItemAdapter(eventList, getContext()));
         return root;
     }
@@ -89,7 +89,6 @@ public class Calendar2 extends Fragment {
             model.setColor(color);
             model.setTitle("Demo");
             model.setLocation(new LocationModel("0.0", "0.0", "Arlington, TX"));
-            model.setWeather(new WeatherModel("11/1/2019", i, TempUnitEnum.celsius,weather));
             Calendar current = Calendar.getInstance();
             current.add(Calendar.HOUR, 1);
             Calendar one_hour = Calendar.getInstance();

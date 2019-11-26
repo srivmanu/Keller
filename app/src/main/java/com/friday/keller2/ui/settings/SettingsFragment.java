@@ -21,10 +21,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import com.friday.keller2.App;
 import com.friday.keller2.BuildConfig;
 import com.friday.keller2.R;
+import com.friday.keller2.enums.TempUnitEnum;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -47,10 +47,10 @@ public class SettingsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
-         View root = inflater.inflate(R.layout.fragment_settings, container, false);
-        importCalendar = (ConstraintLayout) root.findViewById(R.id.import_calendar_text);
-        temp_toggle = (Switch) root.findViewById(R.id.switch2);
-        serverUrl = (TextView) root.findViewById(R.id.footer_server_url_text);
+        View root = inflater.inflate(R.layout.fragment_settings, container, false);
+        importCalendar = root.findViewById(R.id.import_calendar_text);
+        temp_toggle = root.findViewById(R.id.switch2);
+        serverUrl = root.findViewById(R.id.footer_server_url_text);
         initializeView();
         return root;
     }
@@ -68,7 +68,7 @@ public class SettingsFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                //TODO UPLOAD TO SERVER
+                //TODO ICS TO UPLOAD TO SERVER
             }
         }
     }
@@ -126,8 +126,10 @@ public class SettingsFragment extends Fragment {
             public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
                 if (isChecked) {
                     //Fahrenheit
+                    App.getInstance().setUserTemperatureUnitChoice(TempUnitEnum.fahrenheit);
                 } else {
                     //celcius
+                    App.getInstance().setUserTemperatureUnitChoice(TempUnitEnum.celsius);
                 }
             }
         });

@@ -12,5 +12,6 @@ public enum WeatherEnum {
     windy,
     cloudy,
     snowy,
+    foggy,
     unknown
 }

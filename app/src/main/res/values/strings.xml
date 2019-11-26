@@ -17,7 +17,7 @@
     <string name="ping_time_str">10 min ago</string>
     <string name="refresh_text">Button to refresh the connection to server.</string>
     <string name="server_details">Server Details</string>
-    <string name="connected">Connected</string>
+    <string name="connected">Connected to</string>
     <string name="server_url">http://server.heroku.com/path1/path2</string>
     <string name="connected_icon">Connected Icon</string>
     <string name="calendar">Calendar</string>
@@ -57,4 +57,13 @@
     <string name="weather">Weather</string>
     <string name="enter_api_url_here">Enter API URL Here</string>
     <string name="server">Server URL</string>
+    <string name="recurrence">Recurrance</string>
+    <string name="splash">splash</string>
+    <string-array name="recurrent_list">
+        <item>Hour</item>
+        <item>Day</item>
+        <item>Week</item>
+        <item>Month</item>
+        <item>Year</item>
+    </string-array>
 </resources>

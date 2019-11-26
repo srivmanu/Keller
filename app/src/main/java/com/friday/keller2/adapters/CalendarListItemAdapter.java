@@ -3,7 +3,6 @@ package com.friday.keller2.adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import com.friday.keller2.App;
 import com.friday.keller2.R;
 import com.friday.keller2.adapters.CalendarListItemAdapter.CalendarListViewHolder;
-import com.friday.keller2.enums.WeatherEnum;
 import com.friday.keller2.models.EventModel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,7 +60,7 @@ public class CalendarListItemAdapter extends Adapter<CalendarListViewHolder> {
             startTime = view.findViewById(R.id.add_event_start_time);
             endTime = view.findViewById(R.id.add_event_end_time);
             weatherView = view.findViewById(R.id.add_event_weather_view);
-            layout = (ConstraintLayout) view.findViewById((R.id.add_event_layout_back));
+            layout = view.findViewById((R.id.add_event_layout_back));
         }
 
         void setView(EventModel event) {
@@ -71,34 +70,16 @@ public class CalendarListItemAdapter extends Adapter<CalendarListViewHolder> {
             eventLocation.setText(event.getLocation().getName());
             startTime.setText((sdf.format(event.getStart().getTime())));
             endTime.setText((sdf.format(event.getEnd().getTime())));
-            weatherView.setImageDrawable((getImageBasedOnWeather(event.getWeather().getWeather())));
-
+            if (event.getModel() != null) {
+                weatherView.setImageDrawable((App.getInstance().getImageBasedOnWeather(
+                        event.getModel().getWeather()
+                        , context.context)));
+            } else {
+                weatherView.setImageDrawable(context.context.getDrawable(R.drawable.weather_unknown));
+            }
             layout.getBackground().setColorFilter(Color.parseColor(event.getColor()), PorterDuff.Mode.SRC_ATOP);
         }
 
-        private Drawable getImageBasedOnWeather(final WeatherEnum weather) {
-            switch (weather) {
-
-                case clear:
-                    return context.context.getDrawable(R.drawable.weather_clear);
-
-                case rainy:
-                    return context.context.getDrawable(R.drawable.weather_rainy);
-
-                case windy:
-                    return context.context.getDrawable(R.drawable.weather_windy);
-
-                case cloudy:
-                    return context.context.getDrawable(R.drawable.weather_cloudy);
-
-                case snowy:
-                    return context.context.getDrawable(R.drawable.weather_snowy);
-                case unknown:
-                    return context.context.getDrawable(R.drawable.weather_unknown);
-                default:
-                    return context.context.getDrawable(R.drawable.weather_unknown);
-            }
-        }
     }
 
     ArrayList<EventModel> list;

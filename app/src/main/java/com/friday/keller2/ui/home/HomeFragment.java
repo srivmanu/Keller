@@ -12,8 +12,8 @@ import com.friday.keller2.AddEventActivity;
 import com.friday.keller2.App;
 import com.friday.keller2.R;
 import com.friday.keller2.models.SummaryModel;
+import com.friday.keller2.models.WeatherModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import org.w3c.dom.Text;
 
 public class HomeFragment extends Fragment {
 
@@ -39,24 +39,32 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        summaryView = (TextView) root.findViewById(R.id.text_home);
-        curr_weather = (TextView) root.findViewById(R.id.now_weather_text);
-        curr_unit = (TextView) root.findViewById(R.id.now_weather_unit);
-        next_unit = (TextView) root.findViewById(R.id.next_weather_unit);
-        next_weather = (TextView) root.findViewById(R.id.next_weather_text);
+        summaryView = root.findViewById(R.id.text_home);
+        curr_weather = root.findViewById(R.id.now_weather_text);
+        curr_unit = root.findViewById(R.id.now_weather_unit);
+        next_unit = root.findViewById(R.id.next_weather_unit);
+        next_weather = root.findViewById(R.id.next_weather_text);
 
-//        initializePage(); //todo uncomment once SummaryModel is done
+        initializePage(); //todo uncomment once SummaryModel is done
         return root;
     }
 
     private void initializePage() {
-        SummaryModel model = App.getSummaryModel();
-        model.getSummaryFromServer();
-        summaryView.setText(model.getSummaryText());
-        curr_weather.setText(String.valueOf(model.getWeather_now().getTemp()));
-        curr_unit.setText(model.getWeather_now().getUnitString());
-        next_weather.setText(String.valueOf(model.getEvent_next().getWeather().getTemp()));
-        next_unit.setText(model.getEvent_next().getWeather().getUnitString());
+        SummaryModel model = App.getInstance().getLocalSummaryModel();
+        if (model != null) {
+            summaryView.setText(model.getSummaryText());
+            curr_weather.setText(String.valueOf(model.getWeather_now().getTemp()));
+            curr_unit.setText(model.getWeather_now().getUnitString());
+            final WeatherModel nextWeather = model.getEvent_next().getModel();
+            if (nextWeather != null) {
+                next_weather.setText(String.valueOf(nextWeather.getTemp()));
+                next_unit.setText(nextWeather.getUnitString());
+            } else {
+                next_weather.setText("ERR");
+
+                next_unit.setText("");
+            }
+        }
 
     }
 }

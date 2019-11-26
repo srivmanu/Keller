@@ -1,40 +1,48 @@
 package com.friday.keller2;
 
-import android.Manifest;
-import android.Manifest.permission;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.webkit.URLUtil;
 import android.widget.EditText;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.BaseMultiplePermissionsListener;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-import dalvik.system.DexClassLoader;
-import java.util.List;
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import okhttp3.Response;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class ServerDetails extends AppCompatActivity {
 
-    private String KELLER_PREFS = "KELLER_PREFS_KEY";
 
-    private String SERVER_URL = "SERVER_URL";
+    private static final String TAG = "ServerDetails";
+
+
+    private EditText url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_server_details);
-        if (true || getSharedPreferences(KELLER_PREFS, MODE_PRIVATE).getString(SERVER_URL, null) != null) {
-            //todo remove true
+        if (App.getInstance().getServerURL() != null) {
+            ConstraintLayout splash = findViewById(R.id.splash);
+            splash.setVisibility(View.VISIBLE);
+            ConstraintLayout server = findViewById(R.id.serverDetailsView);
+            server.setVisibility(View.GONE);
             openMainActivity();
+        } else {
+            ConstraintLayout splash = findViewById(R.id.splash);
+            splash.setVisibility(View.GONE);
+            ConstraintLayout server = findViewById(R.id.serverDetailsView);
+            server.setVisibility(View.VISIBLE);
         }
-        final EditText url = findViewById(R.id.server_url_input);
+
+        url = findViewById(R.id.server_url_input);
         FloatingActionButton fab = findViewById(R.id.fab_url_page);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,11 +50,7 @@ public class ServerDetails extends AppCompatActivity {
                 String urlText = url.getText().toString();
                 if (isValidURL(urlText)) {
                     url.setError(null);
-                    if (isConnectionSuccessful(urlText)) {
-                        saveURLandGoToNextPage(urlText);
-                    } else {
-                        url.setError("URL does not correspond to valid Server");
-                    }
+                    makeConnection(urlText);
                 } else {
                     url.setError("Error in URL");
                 }
@@ -54,28 +58,74 @@ public class ServerDetails extends AppCompatActivity {
         });
     }
 
-    private boolean isConnectionSuccessful(final String text) {
-        //TODO make connection and check if valid url
-        return false;
+    private void causeError(final String s) {
+        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+        url.setError(s);
     }
 
+
     private boolean isValidURL(final CharSequence s) {
-        if (URLUtil.isValidUrl(s.toString())) {
-            return true;
-        } else {
-            return false;
+        return URLUtil.isValidUrl(s.toString());
+    }
+
+    private void makeConnection(String urlText) {
+        urlText = urlText + "/weather/currentweather";
+        boolean valid = URLUtil.isValidUrl(urlText) && urlText.endsWith("/api");
+        if (!valid) {
+            causeError("Invalid URL");
+        }
+
+        FutureRe callback = new FutureRe();
+        App.getInstance().get(urlText, null, callback);
+        try {
+            Response response = callback.get();
+            if (response.isSuccessful()) {
+                final String responseStr = response.body().string();
+                try {
+                    JSONObject o = new JSONObject(responseStr);
+                    saveURLandGoToNextPage(urlText);
+                } catch (JSONException e) {
+                    Log.d(TAG, "RES : " + responseStr);
+                    causeError("Invalid Server");
+                }
+            } else {
+                causeError("URL does not correspond to valid server");
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     private void openMainActivity() {
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
-        finish();
+        App.getInstance().getDataFromServerAndStore();
+        final Handler handler = new Handler();
+        final long delayTime = 2000; // 2s
+
+        if (App.getInstance().getCurrentWeather() != null && App.getInstance().getLocalSummaryModel() != null
+                && App.getInstance().gethourlyweather() != null) {
+            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(i);
+            finish();
+        } else {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                    finish();
+                    startActivity(i);
+                }
+            }, delayTime);
+        }
+
     }
 
+
     private void saveURLandGoToNextPage(final String urlText) {
-        SharedPreferences prefs = getSharedPreferences(KELLER_PREFS, MODE_PRIVATE);
-        prefs.edit().putString(SERVER_URL, urlText).apply();
+        App.getInstance().saveServerURL(urlText);
         openMainActivity();
     }
 }

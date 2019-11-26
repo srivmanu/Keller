@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -107,51 +106,30 @@
         app:layout_constraintTop_toBottomOf="@+id/add_event_end_time"
         app:layout_constraintVertical_bias="0.0" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/add_event_notifications_handler"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
 
-        android:layout_marginBottom="16dp"
-        tools:listitem="@layout/notification_list_item"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/add_event_weather_miniview"
-        app:layout_constraintEnd_toEndOf="@+id/add_event_location"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/add_event_location"
-        app:layout_constraintTop_toBottomOf="@+id/add_event_fab"
-        tools:itemCount="2"/>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_event_fab"
+    <Switch
+        android:id="@+id/recurrance_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:clickable="true"
-        android:tint="@color/colorFGTint"
-        app:backgroundTint="#B9B9B9"
-        app:fabCustomSize="32sp"
-        app:fabSize="mini"
         app:layout_constraintBottom_toTopOf="@+id/add_event_weather_miniview"
         app:layout_constraintEnd_toEndOf="@+id/add_event_location"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/add_event_location"
         app:layout_constraintTop_toBottomOf="@+id/add_event_location"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_add"
-        android:focusable="true" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/add_event_notif_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/notifications"
+        android:text="@string/recurrence"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toBottomOf="@+id/add_event_fab"
-        app:layout_constraintEnd_toStartOf="@+id/add_event_fab"
+        app:layout_constraintBottom_toBottomOf="@+id/recurrance_switch"
+        app:layout_constraintEnd_toStartOf="@+id/recurrance_switch"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/add_event_location"
-        app:layout_constraintTop_toTopOf="@+id/add_event_fab" />
+        app:layout_constraintTop_toTopOf="@+id/recurrance_switch" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -167,4 +145,91 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@android:drawable/ic_menu_save" />
+
+    <ScrollView
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/add_event_weather_miniview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_event_notif_title"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingEnd="8sp"
+            android:paddingStart="8sp">
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4sp"
+                android:ems="10"
+                android:hint="Repeat Every"
+                android:inputType="number" />
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4sp"
+                android:entries="@array/recurrent_list" />
+
+            <CheckBox
+                android:id="@+id/cb_monday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4sp"
+                android:text="Monday" />
+
+            <CheckBox
+                android:id="@+id/cb_tuesday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4sp"
+                android:text="Tuesday" />
+
+            <CheckBox
+                android:id="@+id/cb_wednesday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4sp"
+                android:text="Wednesday" />
+
+            <CheckBox
+                android:id="@+id/cb_thursday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4sp"
+                android:text="Thursday" />
+
+            <CheckBox
+                android:id="@+id/cb_friday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4sp"
+                android:text="Friday" />
+
+            <CheckBox
+                android:id="@+id/cb_saturday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4sp"
+                android:text="Friday" />
+
+            <CheckBox
+                android:id="@+id/cb_sunday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4sp"
+                android:text="Sunday" />
+
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

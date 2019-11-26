@@ -12,24 +12,32 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-
 import androidx.core.app.ActivityCompat;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
 public class GeoLocator {
+
     private static final int REQUEST_LOCATION = 1;
+
     private static double lattitude;
+
     private static double longitude;
-    private Context context;
+
     private String address;
+
     private String city;
-    private String state;
+
+    private Context context;
+
     private String country;
-    private String postalCode;
+
     private String knownName;
+
+    private String postalCode;
+
+    private String state;
 
     public GeoLocator(Context context) {
         this.context = context;
@@ -42,7 +50,9 @@ public class GeoLocator {
         LocationManager locationManager = (LocationManager) this.context.getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled("gps")) {
         } else if (locationManager.isProviderEnabled("gps")) {
-            if (ActivityCompat.checkSelfPermission(this.context, "android.permission.ACCESS_FINE_LOCATION") != 0 && ActivityCompat.checkSelfPermission(this.context, "android.permission.ACCESS_COARSE_LOCATION") != 0) {
+            if (ActivityCompat.checkSelfPermission(this.context, "android.permission.ACCESS_FINE_LOCATION") != 0
+                    && ActivityCompat.checkSelfPermission(this.context, "android.permission.ACCESS_COARSE_LOCATION")
+                    != 0) {
             } else {
                 Location location = locationManager.getLastKnownLocation("network");
                 Location location1 = locationManager.getLastKnownLocation("gps");
@@ -75,14 +85,6 @@ public class GeoLocator {
 
     }
 
-    public double getLattitude() {
-        return lattitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
     public void geoAddress() {
         Geocoder geocoder = new Geocoder(this.context, Locale.getDefault());
 
@@ -108,20 +110,28 @@ public class GeoLocator {
         return this.city;
     }
 
-    public String getState() {
-        return this.state;
-    }
-
     public String getCountry() {
         return this.country;
+    }
+
+    public String getKnownName() {
+        return this.knownName;
+    }
+
+    public double getLattitude() {
+        return lattitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
     }
 
     public String getPostalCode() {
         return this.postalCode;
     }
 
-    public String getKnownName() {
-        return this.knownName;
+    public String getState() {
+        return this.state;
     }
 
 

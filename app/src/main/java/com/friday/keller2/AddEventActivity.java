@@ -5,27 +5,19 @@ import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.friday.keller2.adapters.NotificationsListRecyclerViewAdapter;
-import com.friday.keller2.enums.TimeUnitEnum;
 import com.friday.keller2.models.EventModel;
 import com.friday.keller2.models.LocationModel;
-import com.friday.keller2.models.NotificationModel;
 import com.friday.keller2.models.WeatherModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class AddEventActivity extends AppCompatActivity {
 
@@ -47,9 +39,6 @@ public class AddEventActivity extends AppCompatActivity {
 
     EditText title;
 
-    private NotificationsListRecyclerViewAdapter adapter;
-
-    private List<NotificationModel> notification_list_array;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,28 +128,9 @@ public class AddEventActivity extends AppCompatActivity {
             }
         });
         location = findViewById(R.id.add_event_location);
-        notification_list = findViewById(R.id.add_event_notifications_handler);
-        notification_fab = findViewById(R.id.add_event_fab);
-        notification_list_array = createBlankList();
 
-        adapter = new NotificationsListRecyclerViewAdapter(
-                notification_list_array);
-        notification_list.setAdapter(adapter);
-        notification_list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-
-        notification_fab.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                addNewNotificationVal();
-            }
-        });
     }
 
-    List<NotificationModel> createBlankList() {
-        final List<NotificationModel> list = new ArrayList<>();
-//        list.add(new NotificationModel());
-        return list;
-    }
 
     private void SaveAndClose() {
         EventModel new_event = new EventModel();
@@ -175,28 +145,9 @@ public class AddEventActivity extends AppCompatActivity {
         new_event.setStart(start);
         new_event.setEnd(end);
         new_event.setLocation(loc);
-        new_event.setWeather(weather);
-        new_event.setNotificationList((List<NotificationModel>) adapter.getList());
 
         new_event.sendToServer();
         finish();
-    }
-
-    private void addNewNotificationVal() {
-        Log.d(TAG, "addNewNotificationVal() called");
-        adapter.getList().add(new NotificationModel(0, TimeUnitEnum.minutes));
-        adapter.notifyDataSetChanged();
-    }
-
-    private void logList() {
-        int i = 0;
-        Log.d(TAG, "logList() called");
-        final List<NotificationModel> myList = adapter.getList();
-        for (NotificationModel model : myList) {
-            Log.d(TAG, "logList : " + i + " : ");
-            model.log();
-            i++;
-        }
     }
 
 }

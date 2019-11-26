@@ -1,12 +1,10 @@
 package com.friday.keller2.models;
 
 import android.util.Log;
+import com.friday.keller2.BuildConfig;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,24 +18,17 @@ public class EventModel {
 
     private static final String TAG = "EventModel";
 
+    String color;
+
     Calendar end;
 
     LocationModel location;
 
-    List<NotificationModel> notificationList;
+    WeatherModel model;
 
     Calendar start;
 
     String title;
-
-    WeatherModel weather;
-
-    public void setColor(final String color) {
-        this.color = color;
-    }
-
-    String color;
-
 
     public EventModel() {
         this.title = "Demo";
@@ -45,8 +36,33 @@ public class EventModel {
         this.end = start;
         end.add(Calendar.HOUR, 2);
         this.location = new LocationModel();
-        this.weather = new WeatherModel();
         this.color = "#00000000";
+    }
+
+    public EventModel(final JSONObject nextEvent) {
+        //TODO GET FROM SERVER EVENT PARSE HERE
+        //TODO SAVE NEXT WEATHER TOO
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "RECD : : " + nextEvent.toString());
+        }
+
+        try {
+            String id = nextEvent.getString("id");
+            if (id != null && !id.equals("null")) {
+                //TODO STUFF HERE
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(final String color) {
+        this.color = color;
     }
 
     public Calendar getEnd() {
@@ -57,40 +73,6 @@ public class EventModel {
         this.end = end;
     }
 
-    public JSONObject getJson() {
-//        {
-//            "id":"EVENT_ID",
-//            "startTime": "UNIX_TIMESTAMP",
-//            "endTime": "UNIX_TIMESTAMP",
-//            "title": "TEXT",
-//            "periodicity": "WEEKLY|DAILY|MONTHLY",
-//            "alerts": [
-//                     "relative difference 1",
-//                    "relative difference2"
-//                ],
-//            "location": {
-//                "latitude": "27.52546",
-//                "longitude": "97.26585"
-//            },
-//            "color": "#ffffff"
-//        }
-        JSONObject jsonObj = null;
-        try {
-            jsonObj = new JSONObject()
-                    .put("id", "EVENT_ID")
-                    .put("startTime", (start.getTimeInMillis() / 1000))
-                    .put("endTime", (end.getTimeInMillis() / 1000))
-                    .put("title", title)
-                    .put("repeat", "TODO")//TODO
-                    .put("alerts", getNotificationJson(notificationList))
-                    .put("location", location.getJson())
-                    .put("color", color);//TODO;
-        } catch (JSONException e) {
-            Log.d(TAG, "getJson() called");
-        }
-        return jsonObj;
-    }
-
     public LocationModel getLocation() {
         return location;
     }
@@ -99,12 +81,12 @@ public class EventModel {
         this.location = location;
     }
 
-    public List<NotificationModel> getNotificationList() {
-        return notificationList;
+    public WeatherModel getModel() {
+        return model;
     }
 
-    public void setNotificationList(final List<NotificationModel> notificationList) {
-        this.notificationList = notificationList;
+    public void setModel(final WeatherModel model) {
+        this.model = model;
     }
 
     public Calendar getStart() {
@@ -123,14 +105,6 @@ public class EventModel {
         this.title = title;
     }
 
-    public WeatherModel getWeather() {
-        return weather;
-    }
-
-    public void setWeather(final WeatherModel weather) {
-        this.weather = weather;
-    }
-
     public void log() {
         Log.d(TAG, logString());
     }
@@ -140,7 +114,6 @@ public class EventModel {
                 + "\nStarts : " + start.getTime()
                 + "\nEnds : " + end.getTime()
                 + "\nLocation : " + location.logString()
-                + "\nWeather : " + weather.logString()
                 + "\nColor : " + color;
     }
 
@@ -160,21 +133,5 @@ public class EventModel {
     public void sendToServer() {
         log();
         //API Call Send to Server : Todo
-    }
-
-    private JSONArray getNotificationJson(final List<NotificationModel> notificationList) {
-//        [
-//                     "relative difference 1",
-//                    "relative difference2"
-//                ],
-        ArrayList<Long> list = new ArrayList<>();
-        for (NotificationModel item : notificationList) {
-            list.add(item.getTimeDiff());
-        }
-        return new JSONArray(list);
-    }
-
-    public String getColor() {
-        return color;
     }
 }

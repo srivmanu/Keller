@@ -31,7 +31,13 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class SettingsFragment extends Fragment {
 
@@ -59,12 +65,27 @@ public class SettingsFragment extends Fragment {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQ_CODE) {
                 Uri uri = data.getData();
+                String FilePath = null;
                 try {
-                    String FilePath = PathUtil.getPath(getContext(), uri);
+                    FilePath = PathUtil.getPath(getContext(), uri);
                     if (BuildConfig.DEBUG) {
                         Log.d(TAG, ": " + FilePath);
                     }
-                } catch (URISyntaxException e) {
+                    FileInputStream fis = new FileInputStream(FilePath);
+                    InputStreamReader isr = new InputStreamReader(fis);
+                    BufferedReader bufferedReader = new BufferedReader(isr);
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        sb.append(line);
+                    }
+                    final String url = App.getInstance().getServerURL() + "/calendarimport";
+                    JSONObject json = new JSONObject();
+                    json.put("calendarFile", sb.toString());
+                    App.getInstance().post(url, json.toString());
+                } catch (URISyntaxException | IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
 

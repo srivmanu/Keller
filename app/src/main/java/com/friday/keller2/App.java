@@ -185,14 +185,13 @@ public class App extends Application {
 
     public String getNewId() {
         getPrefs().edit().putInt(idKey,
-                getPrefs().getInt(idKey, 0) + 1).apply();
+                getPrefs().getInt(idKey, 0) + 1).commit();
         return String.valueOf(getPrefs().getInt(idKey, 0));
 
     }
 
     public String getServerURL() {
-        return getSharedPreferences(KELLER_PREFS, MODE_PRIVATE)
-                .getString(SERVER_URL, getResources().getString(R.string.server_url)); //todo make null later
+        return getPrefs().getString(SERVER_URL, null); //todo make null later
     }
 
     public void getSummaryFromServer() {
@@ -231,7 +230,7 @@ public class App extends Application {
     }
 
     public void setUserTemperatureUnitChoice(TempUnitEnum choice) {
-        getPrefs().edit().putString(choiceKey, choice.name()).apply();
+        getPrefs().edit().putString(choiceKey, choice.name()).commit();
     }
 
     public WeatherEnum getWeatherEnumFromJSONData(final String icon) {
@@ -323,6 +322,10 @@ public class App extends Application {
                 }
             }
         };
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "URL : " + url);
+        }
+
         get(url, params, future);
     }
 
@@ -331,7 +334,10 @@ public class App extends Application {
     }
 
     public void saveServerURL(final String urlText) {
-        getPrefs().edit().putString(SERVER_URL, urlText).apply();
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "SAVING URL: " + urlText);
+        }
+        getPrefs().edit().putString(SERVER_URL, urlText).commit();
     }
 
     public void post(String url, String json) throws IOException {
@@ -399,7 +405,7 @@ public class App extends Application {
     }
 
     private SharedPreferences getPrefs() {
-        return getSharedPreferences("KELLER_PREFS", MODE_PRIVATE);
+        return getSharedPreferences(KELLER_PREFS, MODE_PRIVATE);
     }
 
     private ArrayList<EventModel> parseEventListJson(final JSONArray jsonObject) {

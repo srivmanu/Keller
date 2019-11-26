@@ -45,7 +45,7 @@ public class HomeFragment extends Fragment {
         next_unit = root.findViewById(R.id.next_weather_unit);
         next_weather = root.findViewById(R.id.next_weather_text);
 
-        initializePage(); //todo uncomment once SummaryModel is done
+        initializePage();
         return root;
     }
 

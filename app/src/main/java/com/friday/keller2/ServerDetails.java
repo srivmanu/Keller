@@ -1,5 +1,6 @@
 package com.friday.keller2;
 
+import android.Manifest.permission;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.listener.single.DialogOnDeniedPermissionListener;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import okhttp3.Response;
@@ -29,12 +32,13 @@ public class ServerDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_server_details);
+        getLocationPermission();
         if (App.getInstance().getServerURL() != null) {
             ConstraintLayout splash = findViewById(R.id.splash);
             splash.setVisibility(View.VISIBLE);
             ConstraintLayout server = findViewById(R.id.serverDetailsView);
             server.setVisibility(View.GONE);
-            openMainActivity();
+            saveURLandGoToNextPage(App.getInstance().getServerURL());
         } else {
             ConstraintLayout splash = findViewById(R.id.splash);
             splash.setVisibility(View.GONE);
@@ -50,6 +54,10 @@ public class ServerDetails extends AppCompatActivity {
                 String urlText = url.getText().toString();
                 if (isValidURL(urlText)) {
                     url.setError(null);
+                    if (BuildConfig.DEBUG) {
+                        Log.d(TAG, " URK?: " + urlText);
+                    }
+
                     makeConnection(urlText);
                 } else {
                     url.setError("Error in URL");
@@ -63,20 +71,41 @@ public class ServerDetails extends AppCompatActivity {
         url.setError(s);
     }
 
+    private void getLocationPermission() {
+        Dexter.withActivity(this)
+                .withPermission(permission.ACCESS_FINE_LOCATION).withListener(
+                DialogOnDeniedPermissionListener.Builder.withContext(getApplicationContext())
+                        .withTitle(getString(R.string.app_name))
+                        .withButtonText("Okay")
+                        .withMessage("Location Permission Needed")
+                        .build())
+                .check();
+
+    }
 
     private boolean isValidURL(final CharSequence s) {
+
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "URL IN LOOP: " + s);
+        }
+
         return URLUtil.isValidUrl(s.toString());
     }
 
     private void makeConnection(String urlText) {
-        urlText = urlText + "/weather/currentweather";
-        boolean valid = URLUtil.isValidUrl(urlText) && urlText.endsWith("/api");
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "url text check: " + urlText);
+        }
+
+        boolean valid = isValidURL(urlText) && urlText.endsWith("/api");
+
         if (!valid) {
             causeError("Invalid URL");
         }
 
         FutureRe callback = new FutureRe();
-        App.getInstance().get(urlText, null, callback);
+        App.getInstance().get(
+                urlText + "/weather/currentweather",null, callback);
         try {
             Response response = callback.get();
             if (response.isSuccessful()) {
@@ -98,34 +127,36 @@ public class ServerDetails extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+//
+//        saveURLandGoToNextPage(urlText);
     }
 
     private void openMainActivity() {
-        App.getInstance().getDataFromServerAndStore();
-        final Handler handler = new Handler();
-        final long delayTime = 2000; // 2s
-
-        if (App.getInstance().getCurrentWeather() != null && App.getInstance().getLocalSummaryModel() != null
-                && App.getInstance().gethourlyweather() != null) {
-            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(i);
-            finish();
-        } else {
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                    finish();
-                    startActivity(i);
-                }
-            }, delayTime);
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "URL ? : " + App.getInstance().getServerURL());
         }
 
+        final Handler handler = new Handler();
+        final long delayTime = 3000; // 2s
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                finish();
+                startActivity(i);
+            }
+        }, delayTime);
     }
 
 
     private void saveURLandGoToNextPage(final String urlText) {
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "SAVE URL CALLED: " + urlText);
+        }
+
         App.getInstance().saveServerURL(urlText);
+
         openMainActivity();
     }
 }
